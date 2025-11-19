@@ -1,0 +1,4 @@
+ứng dụng điện thoại di động:
+- Frontend: Giao diện: quản lý người dùng. chức năng đăng ký số điện thoại nhận thông báo khi có cuộc gọi đến, đăng ký số điện thoại chính chủ
+- Backend: khi có cuộc gọi đến sẽ gửi 1 message lên MQTT Mosquitto
+Tôi sẽ có 1 mạch vi xử lý arduino để lắng nghe sự kiện từ MQTT Mosquitto để sau đó gửi tín hiệu output cho 1 chiếc đèn nhấp nháy để cảnh báo có cuộc gọi đến

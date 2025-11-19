@@ -1,0 +1,31 @@
+### General
+.DS_Store
+Thumbs.db
+*.log
+
+### Visual Studio / .NET
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+[Bb]in/
+[Oo]bj/
+.vs/
+backend/CallAlert.Api/.vs/
+
+### Node / React Native
+node_modules/
+CallAlertMobile/node_modules/
+CallAlertMobile/android/app/build/
+CallAlertMobile/android/.gradle/
+CallAlertMobile/ios/build/
+CallAlertMobile/.bundle/
+
+### Environment / Misc
+.env
+.env.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+

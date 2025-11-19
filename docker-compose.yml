@@ -1,0 +1,47 @@
+services:
+  api:
+    container_name: call-alert-api
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+      - mqtt
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      # - ConnectionStrings__DefaultConnection=server=db;port=3306;database=call_alert_db;user=call_alert_user;password=call_alert_pass
+      - Mqtt__Host=mqtt
+      - Mqtt__Port=1883
+      - Mqtt__Username=
+      - Mqtt__Password=
+    ports:
+      - "5000:80"
+
+  db:
+    container_name: call-alert-sqlserver
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Ab@123456
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - db_data:/var/opt/mssql
+
+  mqtt:
+    container_name: call-alert-mqtt
+    image: eclipse-mosquitto:2
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - mqtt_data:/mosquitto/data
+      - mqtt_log:/mosquitto/log
+
+volumes:
+  db_data:
+  mqtt_data:
+  mqtt_log:
