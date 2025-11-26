@@ -46,6 +46,18 @@ public class AuthController : ControllerBase
             return Unauthorized(new { message = ex.Message });
         }
     }
+    [HttpGet("test")]
+    public async Task<IActionResult> Loginss()
+    {
+        try
+        {
+            return Ok("Ok");
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+    }
 }
 
 

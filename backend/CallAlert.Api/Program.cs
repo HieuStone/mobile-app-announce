@@ -23,6 +23,16 @@ builder.Services.AddScoped<ICallEventService, CallEventService>();
 builder.Services.AddSingleton<IMqttPublisherService, MqttPublisherService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 // EF Core + SQL Server
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
@@ -68,8 +78,8 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
-
+//app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 
