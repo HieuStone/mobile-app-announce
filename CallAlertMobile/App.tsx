@@ -6,13 +6,14 @@
  */
 
 import React from 'react';
-import {StatusBar, useColorScheme} from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {AuthProvider} from './src/context/AuthContext';
-import {AppNavigator} from './src/navigation/AppNavigator';
+import { StatusBar, useColorScheme } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AuthProvider } from './src/context/AuthContext';
+import { AppNavigator } from './src/navigation/AppNavigator';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
+  console.log('APP.JS IS RUNNING');
 
   return (
     <SafeAreaProvider>

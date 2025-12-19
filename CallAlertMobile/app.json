@@ -1,4 +1,26 @@
 {
-  "name": "CallAlertMobile",
-  "displayName": "CallAlertMobile"
+  "expo": {
+    "name": "CallAlertMobile",
+    "slug": "CallAlertMobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": false,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.callalertmobile"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.callalertmobile"
+    },
+    "web": {},
+    "extra": {
+      "eas": {
+        "projectId": "ef52fbe3-33b4-41d3-b759-047087195a9c"
+      }
+    }
+  }
 }

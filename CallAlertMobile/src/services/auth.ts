@@ -1,4 +1,4 @@
-import {apiClient} from './api';
+import { apiClient } from './api';
 
 export interface AuthResponse {
   userId: number;
@@ -19,12 +19,14 @@ export interface RegisterPayload extends LoginPayload {
 }
 
 export const login = async (payload: LoginPayload) => {
-  const {data} = await apiClient.post<AuthResponse>('/api/auth/login', payload);
+  console.log("payload", payload);
+
+  const { data } = await apiClient.post<AuthResponse>('/api/auth/login', payload);
   return data;
 };
 
 export const register = async (payload: RegisterPayload) => {
-  const {data} = await apiClient.post<AuthResponse>(
+  const { data } = await apiClient.post<AuthResponse>(
     '/api/auth/register',
     payload,
   );
