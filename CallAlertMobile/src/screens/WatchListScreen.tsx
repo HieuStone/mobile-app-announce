@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,48 +8,97 @@ import {
   TouchableOpacity,
   Switch,
 } from 'react-native';
+import { apiClient } from '../services/api';
 
 interface WatchNumber {
   id: string;
   phoneNumber: string;
   label?: string;
   isActive: boolean;
+  userId: string;
 }
 
-const sampleData: WatchNumber[] = [
-  {id: '1', phoneNumber: '0909123456', label: 'Khách hàng A', isActive: true},
-  {id: '2', phoneNumber: '0988887777', label: 'Sửa chữa', isActive: false},
-];
-
 const WatchListScreen: React.FC = () => {
-  const [numbers, setNumbers] = useState(sampleData);
+  const [numbers, setNumbers] = useState<WatchNumber[]>([]);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [label, setLabel] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const addNumber = () => {
+  const fetchNumbers = async () => {
+    try {
+      setLoading(true);
+      const response = await apiClient.get('/api/watchnumbers');
+      setNumbers(response.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách:", error);
+      // alert("Không thể tải danh sách từ server");
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+  useEffect(() => {
+    fetchNumbers();
+  }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchNumbers();
+  };
+
+  const addNumber = async () => {
     if (!phoneNumber.trim()) {
+      alert("Vui lòng nhập số điện thoại");
       return;
     }
-    const newNumber: WatchNumber = {
-      id: Date.now().toString(),
-      phoneNumber,
-      label,
-      isActive: true,
-    };
-    setNumbers(prev => [newNumber, ...prev]);
-    setPhoneNumber('');
-    setLabel('');
+
+    setLoading(true);
+
+    try {
+      const payload = {
+        phoneNumber: phoneNumber,
+        label: label,
+        isActive: true,
+      };
+
+      const response = await apiClient.post('/api/watchnumbers', payload);
+
+      if (response.status === 200 || response.status === 201) {
+        // 3. Cập nhật giao diện với dữ liệu trả về từ server
+        const savedNumber: WatchNumber = {
+          id: response.data.id || Date.now().toString(),
+          phoneNumber: response.data.phoneNumber,
+          label: response.data.label,
+          isActive: response.data.isActive,
+          userId: response.data.userId.toString()
+        };
+
+        setNumbers(prev => [savedNumber, ...prev]);
+        setPhoneNumber('');
+        setLabel('');
+        alert("Đã đăng ký số thành công!");
+      }
+    } catch (error: any) {
+      console.error("Lỗi khi đăng ký số:", error);
+
+      // Xử lý lỗi hiển thị cho người dùng
+      const errorMsg = error.response?.data?.message || "Không thể kết nối tới server";
+      alert("Lỗi: " + errorMsg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const toggleActive = (id: string) => {
     setNumbers(prev =>
       prev.map(item =>
-        item.id === id ? {...item, isActive: !item.isActive} : item,
+        item.id === id ? { ...item, isActive: !item.isActive } : item,
       ),
     );
   };
 
-  const renderItem = ({item}: {item: WatchNumber}) => (
+  const renderItem = ({ item }: { item: WatchNumber }) => (
     <View style={styles.item}>
       <View>
         <Text style={styles.phone}>{item.phoneNumber}</Text>
@@ -85,6 +134,13 @@ const WatchListScreen: React.FC = () => {
         keyExtractor={item => item.id}
         renderItem={renderItem}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        ListEmptyComponent={() => (
+          <View style={{ alignItems: 'center', marginTop: 20 }}>
+            <Text>{loading ? 'Đang tải...' : 'Chưa có số nào được theo dõi'}</Text>
+          </View>
+        )}
       />
     </View>
   );

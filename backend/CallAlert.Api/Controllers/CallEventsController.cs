@@ -33,11 +33,11 @@ public class CallEventsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateCallEventRequest request)
     {
-        if (!TryGetUserId(out var userId))
-        {
-            return Unauthorized();
-        }
-
+        //if (!TryGetUserId(out var userId))
+        //{
+        //    return Unauthorized();
+        //}
+        TryGetUserId(out var userId);
         try
         {
             var result = await _service.CreateAsync(userId, request);
@@ -58,6 +58,23 @@ public class CallEventsController : ControllerBase
 
         userId = 0;
         return false;
+    }
+    [HttpPost("testmqtt")]
+    public async Task<IActionResult> TestMQTT()
+    {
+        try
+        {
+            var result = await _service.TestMQTT();
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new
+            {
+                message = ex.Message,
+                detail = ex.InnerException?.Message
+            });
+        }
     }
 }
 

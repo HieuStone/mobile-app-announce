@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://10.0.3.210:5000';
+const API_BASE_URL = 'https://locally-untinned-donn.ngrok-free.dev/';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,

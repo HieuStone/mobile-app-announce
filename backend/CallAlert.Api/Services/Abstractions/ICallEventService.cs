@@ -6,6 +6,7 @@ public interface ICallEventService
 {
     Task<IEnumerable<CallEventDto>> GetAsync(int userId, DateTime? from, DateTime? to, bool? isWatched);
     Task<CallEventDto> CreateAsync(int userId, CreateCallEventRequest request);
+    Task<bool> TestMQTT();
 }
 
 

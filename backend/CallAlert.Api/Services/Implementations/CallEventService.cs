@@ -109,6 +109,11 @@ public class CallEventService : ICallEventService
     private static CallEventDto MapToDto(CallEvent entity) =>
         new(entity.Id, entity.CallerNumber, entity.CalledAt, entity.CallStatus, entity.DeviceId,
             entity.IsWatchedNumber, entity.MqttPublished, entity.MqttPublishedAt, entity.CreatedAt);
+    public async Task<bool> TestMQTT()
+    {
+            await _mqttPublisherService.PublishIncomingCallAsync("helo");
+            return true;
+    }
 }
 
 
